@@ -14,23 +14,28 @@ on: #on [required] - name of GitHub event that triggers the workflow
 
 jobs: #jobs [required] - a set of instructions that run on the same runner; can be sequence of tasks; one or more jobs
   build: #build [required] - name of the job
-  ### 5. RUNNERS ###
+    ### 5. RUNNERS ###
     runs-on: ubuntu-latest #runs-on [required] - type of runner
     steps: #steps [required] - a sequence of tasks that will be executed
-    ### 6. ACTIONS ###
-        - uses: actions/checkout@v4 #uses - select an action, under path action/the reusable code is hosted
-        - name: Set up JDK 17
-          uses: actions/setup-java@v4
-          with:
-            java-version: '17'
-            distribution: "temurin"
-            cache: maven
-        - name: Build with Maven
-          run: mvn -B package pom.xml
-        - name: Upload artifacts
-          uses: actions/upload-artifact@v4
-          with:
-            name: target-files
-        - name: Display structure of downloaded files
-          run: ls -R
-        - name: Download artifacts
+      ### 6. ACTIONS ###
+      - uses: actions/checkout@v4 #uses - select an action, under path action/the reusable code is hosted
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: "temurin"
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B package pom.xml
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: target-files
+          path: target
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: target-files
+          path: target
